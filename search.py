@@ -97,34 +97,19 @@ def depthFirstSearch(problem):
     w = Directions.WEST
     n = Directions.NORTH
     e = Directions.EAST
-    firstAction = (problem.getStartState(), Directions.STOP, 0) 
-
-    print "Start:", problem.getStartState()
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
-    
-
-    """
-    A CHANGE
-    """
+     
     actionsS = []
-    currentNode = firstAction
-    print "firstAct: ", firstAction
-    print "/////////////////////////////////"
+    currentNode = (problem.getStartState(), Directions.STOP, 0)
     while 1:
         deadend = 0
         stackVisited.push(currentNode)
         currentOptions = problem.getSuccessors(currentNode[0])
-        print "currNode: ", currentNode
         for option in currentOptions:
             status = 0
-            print "option[0]: ", option[0]
             for obj in stackVisited.list:
-                #print "obj[0]: ", obj[0]
                 if obj[0] == option[0]:
                     status = 1
             for obj2 in stackRemoved.list:
-                #print "objRem: ", obj2
                 if obj2[0] == option[0]:
                     status = 1
 
@@ -140,39 +125,10 @@ def depthFirstSearch(problem):
             currentNode = stackVisited.pop()
             stackRemoved.push(currentNode)
             actionsS.append(Actions.reverseDirection(currentNode[1]))
-            print "deadend: ", currentNode
             currentNode = stackVisited.pop()
-            print "now: ", currentNode
 
         if problem.isGoalState(currentNode[0]):
             return actionsS
-
-        #for i in actionsS:
-        print(' '.join(str(x) for x in actionsS))
-           # print(i, end=" ")
-            #print "  action: ", i
-        #name = raw_input("E:")
-        #print "done", name
-    return actionsS
-    print "/////////////////////////////////"
-    for obj in stackVisited.list:        
-        print "obj: ", obj
-       # for obj in stackVisited
-        #if option doesnt exist in the stack go to said option
-       # stackVisited.push(option[0])
-
-    print "stackOptions: ", stackOptions        
-    #nextState = getNextState(currentOptions)
-    #instate = input("in: ")
-    #print problem.getSuccessors(instate)
-
-
-    
-   # stack2 = Stack()
-   # stack2.push(state1[0])
-    return []
-    return  [s, s, n, n, s, s, n, n, s, s, n, n, s, s, w, s, w, w, s, w]
-
     util.raiseNotDefined()
 
 
