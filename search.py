@@ -114,13 +114,11 @@ def depthFirstSearch(problem):
                     status = 1
 
             if status == 0:
-                print "Not found."
                 status = 0
                 currentNode = option
                 actionsS.append(option[1])
                 break
-            else:
-                print "Found."
+            
         if status:
             currentNode = stackVisited.pop()
             stackRemoved.push(currentNode)
