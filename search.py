@@ -109,22 +109,22 @@ def depthFirstSearch(problem):
     """
     actionsS = []
     currentNode = firstAction
-    stackVisited.push(currentNode)
     print "firstAct: ", firstAction
     print "/////////////////////////////////"
     while 1:
         deadend = 0
+        stackVisited.push(currentNode)
         currentOptions = problem.getSuccessors(currentNode[0])
         print "currNode: ", currentNode
         for option in currentOptions:
             status = 0
             print "option[0]: ", option[0]
             for obj in stackVisited.list:
-                print "obj[0]: ", obj[0]
+                #print "obj[0]: ", obj[0]
                 if obj[0] == option[0]:
                     status = 1
             for obj2 in stackRemoved.list:
-                print "objRem: ", obj2
+                #print "objRem: ", obj2
                 if obj2[0] == option[0]:
                     status = 1
 
@@ -132,7 +132,6 @@ def depthFirstSearch(problem):
                 print "Not found."
                 status = 0
                 currentNode = option
-                stackVisited.push(option)
                 actionsS.append(option[1])
                 break
             else:
@@ -143,13 +142,17 @@ def depthFirstSearch(problem):
             actionsS.append(Actions.reverseDirection(currentNode[1]))
             print "deadend: ", currentNode
             currentNode = stackVisited.pop()
-            
+            print "now: ", currentNode
+
         if problem.isGoalState(currentNode[0]):
             return actionsS
-        for i in actionsS:
-            print "  action: ", i
-        name = raw_input("E:")
-        print "done", name
+
+        #for i in actionsS:
+        print(' '.join(str(x) for x in actionsS))
+           # print(i, end=" ")
+            #print "  action: ", i
+        #name = raw_input("E:")
+        #print "done", name
     return actionsS
     print "/////////////////////////////////"
     for obj in stackVisited.list:        
