@@ -103,6 +103,10 @@ def depthFirstSearch(problem):
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     
+
+    """
+    A CHANGE
+    """
     actionsS = []
     currentNode = firstAction
     stackVisited.push(currentNode)
