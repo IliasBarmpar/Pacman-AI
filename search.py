@@ -90,45 +90,35 @@ def depthFirstSearch(problem):
     from game import Directions
     from util import Stack
  
-
-
     pathAct = []
     path = Stack()
     exploredSet = set()
     frontier = Stack()
-    frontier.push( (problem.getStartState()))
+    frontier.push( (problem.getStartState(), Directions.STOP, 0))
     while 1:
         if frontier.isEmpty():
             return []
         currNode = frontier.pop()
-        print "currNode:", currNode
-        if problem.isGoalState(currNode):
-            print "finally it has happened to me"
-            print(' '.join(str(z) for z in frontier.list))
-            print(' '.join(str(y) for y in path.list))
+        if problem.isGoalState(currNode[0]):
             for i in path.list:
-                if i[0] not in frontier.list:
+                if i not in frontier.list:
                     pathAct.append(i[1])
-            print(' '.join(str(y) for y in pathAct))
             return pathAct
-        exploredSet.add(currNode)
+        exploredSet.add(currNode[0])
 
         checkDeadEnd = 1
-        for i in problem.getSuccessors(currNode):
-            print "  succ: ", i
-            if i[0] not in exploredSet:# and i[0] not in frontier.list:
-                frontier.push(i[0])
+        for i in problem.getSuccessors(currNode[0]):
+            if i[0] not in exploredSet and i[0] not in frontier.list:
+                frontier.push(i)
                 path.push(i)
                 checkDeadEnd = 0
 
         if checkDeadEnd:
-            print "deadend on node: ", currNode
             for l in reversed(path.list):
-                if l[0] != frontier.list[-1]:
+                if l != frontier.list[-1]:
                     path.pop();
                 else:
                     break
-            
     util.raiseNotDefined()
 
 
