@@ -101,6 +101,7 @@ def depthFirstSearch(problem):
     actionsS = []
     currentNode = (problem.getStartState(), Directions.STOP, 0)
     while 1:
+        if 
         deadend = 0
         stackVisited.push(currentNode)
         currentOptions = problem.getSuccessors(currentNode[0])
@@ -122,7 +123,8 @@ def depthFirstSearch(problem):
         if status:
             currentNode = stackVisited.pop()
             stackRemoved.push(currentNode)
-            actionsS.append(Actions.reverseDirection(currentNode[1]))
+            actionsS.pop()
+            #actionsS.append(Actions.reverseDirection(currentNode[1]))
             currentNode = stackVisited.pop()
 
         if problem.isGoalState(currentNode[0]):
