@@ -88,47 +88,47 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
     from game import Directions
-    from game import Actions
     from util import Stack
+ 
 
-    stackVisited = Stack()
-    stackRemoved = Stack()
-    s = Directions.SOUTH
-    w = Directions.WEST
-    n = Directions.NORTH
-    e = Directions.EAST
-     
-    actionsS = []
-    currentNode = (problem.getStartState(), Directions.STOP, 0)
+
+    pathAct = []
+    path = Stack()
+    exploredSet = set()
+    frontier = Stack()
+    frontier.push( (problem.getStartState()))
     while 1:
-        if 
-        deadend = 0
-        stackVisited.push(currentNode)
-        currentOptions = problem.getSuccessors(currentNode[0])
-        for option in currentOptions:
-            status = 0
-            for obj in stackVisited.list:
-                if obj[0] == option[0]:
-                    status = 1
-            for obj2 in stackRemoved.list:
-                if obj2[0] == option[0]:
-                    status = 1
+        if frontier.isEmpty():
+            return []
+        currNode = frontier.pop()
+        print "currNode:", currNode
+        if problem.isGoalState(currNode):
+            print "finally it has happened to me"
+            print(' '.join(str(z) for z in frontier.list))
+            print(' '.join(str(y) for y in path.list))
+            for i in path.list:
+                if i[0] not in frontier.list:
+                    pathAct.append(i[1])
+            print(' '.join(str(y) for y in pathAct))
+            return pathAct
+        exploredSet.add(currNode)
 
-            if status == 0:
-                status = 0
-                currentNode = option
-                actionsS.append(option[1])
-                break
+        checkDeadEnd = 1
+        for i in problem.getSuccessors(currNode):
+            print "  succ: ", i
+            if i[0] not in exploredSet:# and i[0] not in frontier.list:
+                frontier.push(i[0])
+                path.push(i)
+                checkDeadEnd = 0
+
+        if checkDeadEnd:
+            print "deadend on node: ", currNode
+            for l in reversed(path.list):
+                if l[0] != frontier.list[-1]:
+                    path.pop();
+                else:
+                    break
             
-        if status:
-            currentNode = stackVisited.pop()
-            stackRemoved.push(currentNode)
-            actionsS.pop()
-            #actionsS.append(Actions.reverseDirection(currentNode[1]))
-            currentNode = stackVisited.pop()
-
-        if problem.isGoalState(currentNode[0]):
-            return actionsS
     util.raiseNotDefined()
 
 
@@ -144,16 +144,35 @@ def depthFirstSearch(problem):
 
 
 
+"""
+
+    path = []
+    exploredSet = set()
+    frontier = Stack()
+    frontier.push((problem.getStartState(), Directions.STOP, 0))
+    while 1:
+        if frontier.isEmpty():
+            return []
+        currNode = frontier.pop()
+        print "CurrNode: ", currNode
+        if problem.isGoalState(currNode[0]):
+            input = raw_input("here we are.")
+            return path
+        exploredSet.add(currNode[0])
+
+        for i in problem.getSuccessors(currNode[0]):
+            if i[0] not in exploredSet and i not in frontier.list:
+                frontier.push(i)
+
+        for y in frontier.list:
+            print y
+
+        input = raw_input("here we are.")
+    util.raiseNotDefined()
 
 
 
-
-
-
-
-
-
-
+"""
 
 
 
