@@ -130,7 +130,6 @@ def breadthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
     from game import Directions
     from util import Queue
-    from util import Stack
 
     pathAct = Queue()
     path = Queue()
@@ -142,7 +141,6 @@ def breadthFirstSearch(problem):
             return []
         
         currNode = frontier.pop()
-        moveTo = currNode
         if problem.isGoalState(currNode[0]):
             goTo = currNode
             for item in path.list:
@@ -171,13 +169,94 @@ def breadthFirstSearch(problem):
 
 
 
-
-
-
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    from game import Directions
+    from util import Queue
+    from util import PriorityQueue
+
+    pathAct = Queue()
+    path = Queue()
+    exploredSet = set()
+    frontier = PriorityQueue()
+    frontier.push( (problem.getStartState(), Directions.STOP, 0), 0 )
+    
+    while 1:
+        if frontier.isEmpty():
+            print "OOOOOOPS"
+            return []
+        #print [row in frontier.heap[]]
+        print(' '.join(str(y) for y in frontier.heap))
+        costOfCurrNode = frontier.heap[0][0]
+        currNode = frontier.pop()
+        print "currNode: ", currNode
+       
+        if problem.isGoalState(currNode[0]):
+            #print "isGoalState"
+            goTo = currNode
+            print "goTo: ", goTo
+            for item in path.list:
+                print "item: ", item
+                if item[1] == goTo:
+                    pathAct.push(goTo[1])
+                    goTo = item[0]
+                    continue
+            return pathAct.list
+        
+        exploredSet.add(currNode[0])
+        #print(' '.join(str(y) for y in exploredSet))
+
+        
+        for i in problem.getSuccessors(currNode[0]):
+            print "i[0]: ", i[0]
+            if i[0] not in exploredSet and i[0] not in [row[2][0] for row in frontier.heap]:
+                print "  got in."
+                frontier.push(i, costOfCurrNode + i[2])
+                path.push(((currNode),i))
+            #elif i[0] in [row[2][0] for index, row in enumerate(frontier.heap)]:
+            elif i[0] in [row[2][0] for row in frontier.heap]:
+                for index, row in enumerate(frontier.heap):
+                    print "i[0]: ", i[0], " 'vs' ", row[2][0]
+                    if i[0] == row[2][0]:
+                        if row[0] > costOfCurrNode +i[2]:
+                            del frontier.heap[index]
+                            frontier.heap.append((costOfCurrNode, row[1], i))
+                            path.push(((currNode),i))
+                    print index, " ", row
+                #TODO check if frontier had more options what happenss
+                #frontier.update(i, costOfCurrNode + i)
+                print(' '.join(str(y) for y in frontier.heap))
+                
+                #if row[0] > costOfCurrNode + i[2]:
+                    #print "wow"
+
+
+        print ""
+        #print [row[2][0] for row in frontier.heap]
+        #print "l: ", l
+        #inp = raw_input()
     util.raiseNotDefined()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def nullHeuristic(state, problem=None):
     """
