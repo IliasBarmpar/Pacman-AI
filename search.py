@@ -144,10 +144,56 @@ def breadthFirstSearch(problem):
         currNode = frontier.pop()
         moveTo = currNode
         print "currNode:", currNode
+
         if problem.isGoalState(currNode[0]):
-            currNode = path.list[1][0]
+            indexes = []
+
+            print "////////////////////////////"
+            print "Start:", problem.getStartState()
+            print "////////////////////////////"
+            for i in path.list:
+                print i
+            print "////////////////////////////"
+            return []
+            print(" \-/ ".join(str(y) for y in path.list))
             print ""
-            print(' '.join(str(y) for y in path.list))
+            print ""
+            backtraceNode = path.list[0][0]
+            pathAct = path.list[0][1][1]
+            print "1:", path.list[0][0]
+            print "2:", path.list[0][1][1]
+            while 1:
+                break
+
+            pathActAct = Queue()
+            goTo = path.list[0][1]
+            for index, item in enumerate(path.list):
+                #print(index, item)
+                #print "->", item[1], " | ", goTo
+                if item[1] == goTo:
+                    pathActAct.push(goTo[1])
+                    goTo = item[0]
+                    #print "  >goTo: ", goTo
+                    continue
+                else:
+                    #print "  >else"
+                    indexes.append(index)
+                
+            for ind in reversed(indexes):
+                path.list.pop(ind)
+            return pathActAct.list
+            print(" - ".join(str(y) for y in pathActAct.list))
+            print(" - ".join(str(y) for y in indexes))
+            print(" \-/ ".join(str(y) for y in path.list))
+            inp = raw_input()
+
+
+
+
+            return []
+
+            print ""
+            print(" \\\-/// ".join(str(y) for y in path.list))
             print ""
             print ""
             while 1:
