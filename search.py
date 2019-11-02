@@ -90,6 +90,7 @@ def depthFirstSearch(problem):
     from game import Directions
     from util import Stack
  
+    
     pathAct = []
     path = Stack()
     exploredSet = set()
@@ -124,53 +125,101 @@ def depthFirstSearch(problem):
 
 
 
-
-
-
-
-
-
-
-
-
-
-"""
-
-    path = []
-    exploredSet = set()
-    frontier = Stack()
-    frontier.push((problem.getStartState(), Directions.STOP, 0))
-    while 1:
-        if frontier.isEmpty():
-            return []
-        currNode = frontier.pop()
-        print "CurrNode: ", currNode
-        if problem.isGoalState(currNode[0]):
-            input = raw_input("here we are.")
-            return path
-        exploredSet.add(currNode[0])
-
-        for i in problem.getSuccessors(currNode[0]):
-            if i[0] not in exploredSet and i not in frontier.list:
-                frontier.push(i)
-
-        for y in frontier.list:
-            print y
-
-        input = raw_input("here we are.")
-    util.raiseNotDefined()
-
-
-
-"""
-
-
-
-
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
+    from game import Directions
+    from util import Queue
+    from util import Stack
+
+    pathAct = []
+    path = Queue()
+    exploredSet = set()
+    frontier = Queue()
+    frontier.push( (problem.getStartState(), Directions.STOP, 0))
+    while 1:
+        if frontier.isEmpty():
+            return []
+        
+        currNode = frontier.pop()
+        moveTo = currNode
+        print "currNode:", currNode
+        if problem.isGoalState(currNode[0]):
+            currNode = path.list[1][0]
+            print ""
+            print(' '.join(str(y) for y in path.list))
+            print ""
+            print ""
+            while 1:
+                inp = raw_input()
+                print "node: ", currNode
+                successorz = problem.getSuccessors(currNode[0])
+                #find correct successor
+                for i in successorz:
+                    print "  sc:", i
+                    print "  DR", Directions.REVERSE[currNode[1]]
+                    if i[1] ==  Directions.REVERSE[currNode[1]]:
+                        moveTo = i
+
+                if moveTo[0] == problem.getStartState():
+                    break
+                
+                #remove everyother node in the path till you find the successor
+                print "  moveTo: ", moveTo
+                enable = 0
+                #for y in path.list[:]:
+                #    print "  y: ", y
+                #    if enable:
+                #        if y[0] != moveTo[0]:
+                #            print ">remove: ", y , "<"
+                #            path.list.remove(y)
+                #        else:
+                #            currNode = y
+                #            break
+                #    if y == currNode:
+                #        enable = 1
+                #        print "    enabled"
+
+                #print(' '.join(str(y) for y in path.list))
+            print "broke free"
+            print "finally it has happened to me"
+            #print(' '.join(str(z) for z in frontier.list))
+            #print(' '.join(str(y) for y in path.list))
+            for i in reversed(path.list):
+                pathAct.append(i[1])
+            return pathAct
+
+        exploredSet.add(currNode[0])
+        for i in problem.getSuccessors(currNode[0]):
+            print "  succ: ", i
+            if i[0] not in exploredSet and i[0] not in [row[0] for row in frontier.list]:
+                print "  gotin" 
+                frontier.push(i)
+                path.push(((currNode),i))
+
+        #if checkDeadEnd:
+        #    print "deadend on node: ", currNode
+        #    for l in reversed(path.list):
+        #       if l != frontier.list[-1]:
+        #           path.pop();
+        #        else:
+        #            break
+
     util.raiseNotDefined()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
