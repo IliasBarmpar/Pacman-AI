@@ -132,7 +132,7 @@ def breadthFirstSearch(problem):
     from util import Queue
     from util import Stack
 
-    pathAct = []
+    pathAct = Queue()
     path = Queue()
     exploredSet = set()
     frontier = Queue()
@@ -143,113 +143,20 @@ def breadthFirstSearch(problem):
         
         currNode = frontier.pop()
         moveTo = currNode
-        print "currNode:", currNode
-
         if problem.isGoalState(currNode[0]):
-            indexes = []
-
-            print "////////////////////////////"
-            print "Start:", problem.getStartState()
-            print "////////////////////////////"
-            for i in path.list:
-                print i
-            print "////////////////////////////"
-            return []
-            print(" \-/ ".join(str(y) for y in path.list))
-            print ""
-            print ""
-            backtraceNode = path.list[0][0]
-            pathAct = path.list[0][1][1]
-            print "1:", path.list[0][0]
-            print "2:", path.list[0][1][1]
-            while 1:
-                break
-
-            pathActAct = Queue()
-            goTo = path.list[0][1]
-            for index, item in enumerate(path.list):
-                #print(index, item)
-                #print "->", item[1], " | ", goTo
+            goTo = currNode
+            for item in path.list:
                 if item[1] == goTo:
-                    pathActAct.push(goTo[1])
+                    pathAct.push(goTo[1])
                     goTo = item[0]
-                    #print "  >goTo: ", goTo
                     continue
-                else:
-                    #print "  >else"
-                    indexes.append(index)
-                
-            for ind in reversed(indexes):
-                path.list.pop(ind)
-            return pathActAct.list
-            print(" - ".join(str(y) for y in pathActAct.list))
-            print(" - ".join(str(y) for y in indexes))
-            print(" \-/ ".join(str(y) for y in path.list))
-            inp = raw_input()
-
-
-
-
-            return []
-
-            print ""
-            print(" \\\-/// ".join(str(y) for y in path.list))
-            print ""
-            print ""
-            while 1:
-                inp = raw_input()
-                print "node: ", currNode
-                successorz = problem.getSuccessors(currNode[0])
-                #find correct successor
-                for i in successorz:
-                    print "  sc:", i
-                    print "  DR", Directions.REVERSE[currNode[1]]
-                    if i[1] ==  Directions.REVERSE[currNode[1]]:
-                        moveTo = i
-
-                if moveTo[0] == problem.getStartState():
-                    break
-                
-                #remove everyother node in the path till you find the successor
-                print "  moveTo: ", moveTo
-                enable = 0
-                #for y in path.list[:]:
-                #    print "  y: ", y
-                #    if enable:
-                #        if y[0] != moveTo[0]:
-                #            print ">remove: ", y , "<"
-                #            path.list.remove(y)
-                #        else:
-                #            currNode = y
-                #            break
-                #    if y == currNode:
-                #        enable = 1
-                #        print "    enabled"
-
-                #print(' '.join(str(y) for y in path.list))
-            print "broke free"
-            print "finally it has happened to me"
-            #print(' '.join(str(z) for z in frontier.list))
-            #print(' '.join(str(y) for y in path.list))
-            for i in reversed(path.list):
-                pathAct.append(i[1])
-            return pathAct
+            return pathAct.list
 
         exploredSet.add(currNode[0])
         for i in problem.getSuccessors(currNode[0]):
-            print "  succ: ", i
             if i[0] not in exploredSet and i[0] not in [row[0] for row in frontier.list]:
-                print "  gotin" 
                 frontier.push(i)
                 path.push(((currNode),i))
-
-        #if checkDeadEnd:
-        #    print "deadend on node: ", currNode
-        #    for l in reversed(path.list):
-        #       if l != frontier.list[-1]:
-        #           path.pop();
-        #        else:
-        #            break
 
     util.raiseNotDefined()
 
