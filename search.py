@@ -150,6 +150,7 @@ def breadthFirstSearch(problem):
                     continue
             return pathAct.list
 
+        inp = raw_input()
         exploredSet.add(currNode[0])
         for i in problem.getSuccessors(currNode[0]):
             if i[0] not in exploredSet and i[0] not in [row[0] for row in frontier.list]:
@@ -185,7 +186,7 @@ def uniformCostSearch(problem):
     while 1:
         if frontier.isEmpty():
             return []
-            
+
         costOfCurrNode = frontier.heap[0][0]
         currNode = frontier.pop()
        
@@ -209,7 +210,7 @@ def uniformCostSearch(problem):
                     if i[0] == row[2][0]:
                         if row[0] > costOfCurrNode +i[2]:
                             del frontier.heap[index]
-                            frontier.heap.append((costOfCurrNode, row[1], i))
+                            frontier.heap.append((costOfCurrNode + i[2], row[1], i))
                             path.push(((currNode),i))
     util.raiseNotDefined()
 
@@ -243,6 +244,82 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    from game import Directions
+    from util import Queue
+    from util import PriorityQueue
+
+    pathAct = Queue()
+    path = Queue()
+    exploredSet = set()
+    frontier = Queue() #TODO a normal list
+    frontier.push( (0, (problem.getStartState(), Directions.STOP, 0) ) )
+
+    while 1:
+        if frontier.isEmpty():
+            return []
+
+        print(' '.join(str(y) for y in frontier.list))
+        print [row[1][0] for row in frontier.list]
+        maxX = float('inf')
+        minInd = -1
+        #Find minimum in frontier
+        for index, i in enumerate(frontier.list):
+            costOfChild = i[0] + heuristic(i[1][0],problem)
+            print "costOfChild: ", costOfChild
+            if costOfChild < maxX:
+                maxX = costOfChild
+                minInd = index
+            print "max: ", maxX
+            print "minInd: ", minInd
+            print ""
+        
+        #Get Minimum from frontier
+        currNode = frontier.list.pop(minInd)
+        print "currNode: ", currNode
+
+        if problem.isGoalState(currNode[1][0]):
+            return []
+            goTo = currNode
+            for item in path.list:
+                if item[1] == goTo:
+                    pathAct.push(goTo[1])
+                    goTo = item[0]
+                    continue
+            return pathAct.list
+        
+        exploredSet.add(currNode[1][0])
+
+        for i in problem.getSuccessors(currNode[1][0]):
+            print "i: ", i 
+            print [row[1][0] for row in frontier.list]
+            #inz = raw_input()
+            if i[0] not in exploredSet and i[0] not in [row[1][0] for row in frontier.list]:
+                frontier.push( ( currNode[0] + i[2], i) )
+                path.push(((currNode[1]),i))
+            elif i[0] in [row[1][0] for row in frontier.list]:
+                print ""
+                print ""
+                print ""
+                print(' '.join(str(y) for y in frontier.list))
+                print "i: ", i
+                print "row: ", row
+                print "row[1][0] ", row[1][0]
+                print "row[0] ", row[0]
+                print "currNode[1][2] ", currNode[1][2]
+                print "i[2] ", i[2]
+                for index, row in enumerate(frontier.list):
+                    print "a"
+                    if i[0] == row[1][0]:
+                        if row[0] > currNode[0] + i[2]:
+                            inp = raw_input("we are here!!!!")
+                            print "b4", (' '.join(str(y) for y in frontier.list))
+                            del frontier.list[index]
+                            frontier.push((currNode[0] + i[2], i))
+                            print "after", (' '.join(str(y) for y in frontier.list))
+                            path.push(((currNode[1]),i))
+                            print "done"
+                            
+        #inp = raw_input()    
     util.raiseNotDefined()
 
 
