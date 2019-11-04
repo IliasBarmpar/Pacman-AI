@@ -267,6 +267,8 @@ def euclideanHeuristic(position, problem, info={}):
 #####################################################
 
 class CornersProblem(search.SearchProblem):
+    #Goal state einai na exei faei OLA ta dots oxi kathe dot na einai goal state
+    #Tha prepei na kwdikopoihsete me diko sas tropo mesa sto state ta poia dots exei faei o pacman
     """
     This search problem finds paths through all four corners of a layout.
 
@@ -288,6 +290,9 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        self.progress = [0,0,0,0]
+        self.costFn = lambda x: 1
+
 
     def getStartState(self):
         """
@@ -295,6 +300,8 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
+        #return self.startingPosition
+        return (self.startingPosition, self.progress)
         util.raiseNotDefined()
 
     def isGoalState(self, state):
@@ -302,6 +309,21 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
+        #for ind, y in enumerate(self.corners):
+        #    if state == y:
+        #        self.progress[ind] = 1
+        #print "state[1]: ", state[1]
+        #kjl = raw_input()
+        for i in state[1]:
+            if i == 0:
+                return 0
+        return 1
+
+        #if 0 not in state[1]:
+        #    return 1
+        #else:
+        #    return 0
+
         util.raiseNotDefined()
 
     def getSuccessors(self, state):
@@ -325,6 +347,18 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            x,y = state[0]
+
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+
+            currProgress = list(state[1])
+            if not self.walls[nextx][nexty]:
+                nextState = (nextx, nexty)
+                if nextState in self.corners:
+                    currProgress[self.corners.index((nextState))] = 1
+                cost = self.costFn(nextState)
+                successors.append( ((nextState, currProgress), action, cost))
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -341,6 +375,7 @@ class CornersProblem(search.SearchProblem):
             x, y = int(x + dx), int(y + dy)
             if self.walls[x][y]: return 999999
         return len(actions)
+
 
 
 def cornersHeuristic(state, problem):

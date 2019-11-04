@@ -89,8 +89,7 @@ def depthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
     from game import Directions
     from util import Stack
- 
-    
+
     pathAct = []
     path = Stack()
     exploredSet = set()
@@ -122,38 +121,40 @@ def depthFirstSearch(problem):
                     break
     util.raiseNotDefined()
 
+
+
+
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
     from game import Directions
     from util import Queue
-
-    pathAct = Queue()
-    path = Queue()
-    exploredSet = set()
+    
+    #exploredSet = set()
+    exploredSet = []
     frontier = Queue()
-    frontier.push( (problem.getStartState(), Directions.STOP, 0))
+    frontier.push( (problem.getStartState(), []) )
+    ourPath = []
     while 1:
         if frontier.isEmpty():
             return []
-        
-        currNode = frontier.pop()
-        if problem.isGoalState(currNode[0]):
-            goTo = currNode
-            for item in path.list:
-                if item[1] == goTo:
-                    pathAct.push(goTo[1])
-                    goTo = item[0]
-                    continue
-            return pathAct.list
 
-        exploredSet.add(currNode[0])
+        currNode = frontier.pop()
+        ourPath = currNode[1]
+        exploredSet.append(currNode[0]) 
+        if problem.isGoalState(currNode[0]):
+            print "path: ", currNode[1]
+            return ourPath
+
         for i in problem.getSuccessors(currNode[0]):
             if i[0] not in exploredSet and i[0] not in [row[0] for row in frontier.list]:
-                frontier.push(i)
-                path.push(((currNode),i))
+                frontier.push((i[0], ourPath + [i[1]] ))
 
     util.raiseNotDefined()
+
+
+
+
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
@@ -206,12 +207,82 @@ def nullHeuristic(state, problem=None):
     """
     return 0
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
     from game import Directions
     from util import Queue
     from util import PriorityQueue
+    
+    exploredSet = []
+    frontier = Queue()
+    frontier.push( (problem.getStartState(), []) )
+    ourPath = []
+    while 1:
+        if frontier.isEmpty():
+            return []
+
+        currNode = frontier.pop()
+        ourPath = currNode[1]
+        exploredSet.append(currNode[0]) 
+        if problem.isGoalState(currNode[0]):
+            print "path: ", currNode[1]
+            return ourPath
+
+        for i in problem.getSuccessors(currNode[0]):
+            if i[0] not in exploredSet and i[0] not in [row[0] for row in frontier.list]:
+                frontier.push((i[0], ourPath + [i[1]] ))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     pathAct = Queue()
     path = Queue()
