@@ -143,7 +143,6 @@ def breadthFirstSearch(problem):
         ourPath = currNode[1]
         exploredSet.append(currNode[0]) 
         if problem.isGoalState(currNode[0]):
-            print "path: ", currNode[1]
             return ourPath
 
         for i in problem.getSuccessors(currNode[0]):
@@ -239,94 +238,50 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     from game import Directions
     from util import Queue
     from util import PriorityQueue
-    
+
     exploredSet = []
-    frontier = Queue()
-    frontier.push( (problem.getStartState(), []) )
-    ourPath = []
-    while 1:
-        if frontier.isEmpty():
-            return []
-
-        currNode = frontier.pop()
-        ourPath = currNode[1]
-        exploredSet.append(currNode[0]) 
-        if problem.isGoalState(currNode[0]):
-            print "path: ", currNode[1]
-            return ourPath
-
-        for i in problem.getSuccessors(currNode[0]):
-            if i[0] not in exploredSet and i[0] not in [row[0] for row in frontier.list]:
-                frontier.push((i[0], ourPath + [i[1]] ))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    pathAct = Queue()
-    path = Queue()
-    exploredSet = set()
     frontier = Queue() #TODO (potentially) a normal list
-    frontier.push( (0, (problem.getStartState(), Directions.STOP, 0) ) )
+    frontier.push( ((problem.getStartState(), []) , 0) )
     while 1:
         if frontier.isEmpty():
             return []
-
-        maxX = float('inf')
-        minInd = -1
+            
+        minn    = float('inf')
+        minInd  = -1
         #Find minimum in frontier
         for index, i in enumerate(frontier.list):
-            costOfChild = i[0] + heuristic(i[1][0],problem)
-            if costOfChild < maxX:
-                maxX = costOfChild
+            costOfChild = i[1] + heuristic(i[0][0],problem)
+            if costOfChild < minn:
+                minn = costOfChild
                 minInd = index
-        
+                
         #Get Minimum from frontier
         currNode = frontier.list.pop(minInd)
-        if problem.isGoalState(currNode[1][0]):
-            goTo = currNode[1]
-            for item in path.list:
-                if item[1] == goTo:
-                    pathAct.push(goTo[1])
-                    goTo = item[0]
-                    continue
-            return pathAct.list
+        #print "currNode: ", currNode
+        if problem.isGoalState(currNode[0][0]):
+            return currNode[0][1]
         
-        exploredSet.add(currNode[1][0])
-        for i in problem.getSuccessors(currNode[1][0]):
-            if i[0] not in exploredSet and i[0] not in [row[1][0] for row in frontier.list]:
-                frontier.push( ( currNode[0] + i[2], i) )
-                path.push(((currNode[1]),i))
-            elif i[0] in [row[1][0] for row in frontier.list]:
+        exploredSet.append(currNode[0][0])
+        for i in problem.getSuccessors(currNode[0][0]):
+            if i[0] not in exploredSet and i[0] not in [row[0][0] for row in frontier.list]:
+                frontier.push( ( (i[0], currNode[0][1]+[i[1]] ) , currNode[1] + i[2]) )
+            elif i[0] in [row[0][0] for row in frontier.list]:
                 for index, row in enumerate(frontier.list):
-                    if i[0] == row[1][0]:
-                        if row[0] > currNode[0] + i[2]:
+                    if i[0] == row[0][0]:
+                        if row[1] > currNode[1] + i[2]:
                             del frontier.list[index]
-                            frontier.push((currNode[0] + i[2], i))
-                            path.push(((currNode[1]),i))
+                            frontier.push( ( (i[0], currNode[0][1]+[i[1]] ) , currNode[1] + i[2] ) )
     util.raiseNotDefined()
 
+"""
+            print "i: ", i
+            print "i[0]: ", i[0]
+            print "expSet: ", exploredSet
+            print [row[0][0] for row in frontier.list]
+            print "currNode[0][1]+[i[1]]: ", currNode[0][1]+[i[1]]
+            print "currNode[1] + i[2]: ", currNode[1] + i[2]
+            print ""
+"""
 
 # Abbreviations
 bfs = breadthFirstSearch
